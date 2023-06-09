@@ -1,13 +1,10 @@
 import json
 import tomllib
 
+
 class ResultsImporter(object):
-    def __init__(self):
-        self._division_results = {
-            "C-3/4",
-            "F-3/4",
-            "M-3/4",
-        }
+    def __init__(self, ranker):
+        self._ranker = ranker
 
     @property
     def division_results(self):
@@ -26,8 +23,28 @@ class ResultsImporter(object):
             raise ValueError("Unknown file type: ", path)
 
     def _import_race(self, race_data):
-        race_name = race_data["name"])
-        
+        race_name = race_data["name"].strip()
 
-    def _add_entry(self, division, team_name, race_name, overall_rank, division_rank, points, members):
-        pass
+        for ranking in race_data["rankings"]:
+            self._import_ranking(race_data, ranking)
+
+    def _import_ranking(self, race_data, ranking):
+        race_name = race_data["name"]
+
+        division = ranking["division"]
+        team_name = ranking["team name"]
+        overall_place = ranking["overall place"]
+        division_place = ranking["division place"]
+        members = None  # ranking["members"]
+
+        points = 1
+
+        self._ranker.add_entry(
+            division,
+            team_name,
+            race_name,
+            overall_place,
+            overall_place,
+            points,
+            members,
+        )

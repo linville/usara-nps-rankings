@@ -5,7 +5,7 @@ hours = 9
 [[rankings]]
 "overall place" = 1
 "division place" = 1
-division = "coed"
+division = "C-3/4"
 "team name" = "Awesome"
 members = [
   "Alex Smith (M)",
@@ -16,7 +16,7 @@ members = [
 [[rankings]]
 "overall place" = 2
 "division place" = 2
-division = "male"
+division = "M-3/4"
 "team name" = "Alright"
 members = [
   "Arnold Southern (M)",
@@ -27,4 +27,5 @@ members = [
 [[rankings]]
 "overall place" = "DNF"
 "division place" = "DNF"
+division = "M-3/4"
 "team name" = "Team Bad"

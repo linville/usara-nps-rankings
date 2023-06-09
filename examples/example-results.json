@@ -6,7 +6,7 @@
     {
       "overall place": 1,
       "division place": 1,
-      "division": "coed",
+      "division": "C-3/4",
       "team name": "Awesome",
       "members": [
         "Alex Smith (M)", "Bob Turkey (M)", "Christine Underfoot (F)"
@@ -15,7 +15,7 @@
     {
       "overall place": 2,
       "division place": 2,
-      "division": "male",
+      "division": "M-3/4",
       "team name": "Alright",
       "members": [
         "Arnold Southern (M)", "Bob Tripper (F)", "Charlie Smith (M)"
@@ -24,6 +24,7 @@
     {
       "overall place": "DNF",
       "division place": "DNF",
+      "division": "M-3/4",
       "team name": "Team Bad"
     }
   ]
