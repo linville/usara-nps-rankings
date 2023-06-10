@@ -7,3 +7,5 @@ dist
 .DS_Store
 __pycache__
 MANIFEST
+source_data
+ranking_output_web/ranking_data.js

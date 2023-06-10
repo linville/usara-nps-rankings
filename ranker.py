@@ -34,13 +34,13 @@ class Ranker(object):
 
         if team_name not in self._division_results[division]:
             self._division_results[division][team_name] = {
-                "total_points": 0,
+                "points": 0,
                 "races": [],
             }
 
         team_entry = self._division_results[division][team_name]
         team_entry["division"] = division
-        team_entry["total_points"] += points
+        team_entry["points"] += points
         team_entry["races"].append(race_name)
 
     def export_json(self, path_to_json):
@@ -49,10 +49,13 @@ class Ranker(object):
 
             for division, results in self._division_results.items():
                 for team, data in results.items():
-                    f.write("[\n")
-                    f.write(' "1",\n')
-                    f.write(' "' + str(data["total_points"]) + '",\n')
-                    f.write(f' "{team}",\n')
-                    f.write(' "' + str(data["division"]) + '",\n')
-                    f.write("],\n")
+                    f.write(
+                        "  {\n"
+                        f'    "rank": 0,\n'
+                        f"    \"points\": {data['points']},\n"
+                        f'    "team": "{team}",\n'
+                        f"    \"races\": {len(data['races'])},\n"
+                        f"    \"division\": \"{data['division']}\",\n"
+                        "  },\n"
+                    )
             f.write("];\n")
