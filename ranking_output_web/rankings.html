@@ -105,9 +105,11 @@ $(document).ready(function () {
             { data: 'division' },
         ],
         order: [[1, 'asc']],
-        "iDisplayLength": 50
+        "iDisplayLength": 50,
+        "searching": true,
     });
 
+    // Handles click-to-show-details of a team
     $('#ranking tbody').on('click', 'td.dt-control', function () {
         var tr = $(this).closest('tr');
         var row = table.row(tr);
@@ -121,6 +123,26 @@ $(document).ready(function () {
             row.child(team_detail(row.data())).show();
             tr.addClass('shown');
         }
+    });
+
+    // Move division filter combobox into table filter area
+    $("#ranking_filter.dataTables_filter").append($("#divisionFilter"));
+
+    // Use the built in datatables API to filter the existing rows by the Category column
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        // Division column is the 5th column
+        var division = data[5];
+
+        var selectedItem = $('#divisionFilter').val();
+        if (selectedItem === "" || division.includes(selectedItem)) {
+            return true;
+        }
+        return false;
+    });
+
+    // Redraw the table after changing division
+    $("#divisionFilter").change(function (e) {
+        table.draw();
     });
 });
 
