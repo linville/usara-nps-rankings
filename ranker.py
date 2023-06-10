@@ -18,8 +18,18 @@ class Ranker(object):
     ):
         """Adds a new team into the division results"""
 
+        if division.startswith("FAM"):
+            # Skip importing family divisions, for now.
+            return
+        elif division.endswith("-1"):
+            # Skip importing soloists, for now.
+            return
+        elif division.endswith("-2"):
+            # Skip importing 2-person teams, for now.
+            return
+
         if division not in self._division_results:
-            print("Skipping")
+            print(f"Unknown division: {division}")
             return
 
         if team_name not in self._division_results[division]:
