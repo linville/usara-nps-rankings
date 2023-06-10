@@ -144,6 +144,9 @@ $(document).ready(function () {
     $("#divisionFilter").change(function (e) {
         table.draw();
     });
+
+    // Force table to re-draw so the default "C-3/4" filter is applied.
+    table.draw();
 });
 
     </script>
