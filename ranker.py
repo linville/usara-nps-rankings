@@ -44,7 +44,7 @@ class Ranker(object):
         team_entry["points"] += points
         
         team_entry["race_data"].append({
-            "date": "2022-1-3",
+            "date": race_date.strftime("%Y-%m-%d"),
             "name": race_name,
             "overall": overall_rank,
             "division": division_rank,
