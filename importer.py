@@ -103,11 +103,13 @@ class ResultsImporter(object):
             if division is None:
                 return
 
-            # USARA points formula
+            # USARA points are awarded using the formula below. Non-DNF
+            # teams are awarded at least 2 points (DNF is 1 point).
             if division_place == "DNF":
                 points = 1
             else:
                 points = round(max_points * (1 - math.log(overall_place) * 0.24))
+                points = max(points, 2)
 
             self._ranker.add_entry(
                 division,
