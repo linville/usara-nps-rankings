@@ -39,7 +39,8 @@ class Ranker(object):
             }
 
         team_entry = self._division_results[division][team_name]
-        team_entry["total_points"] += 1
+        team_entry["division"] = division
+        team_entry["total_points"] += points
         team_entry["races"].append(race_name)
 
     def export_json(self, path_to_json):
@@ -52,6 +53,6 @@ class Ranker(object):
                     f.write(' "1",\n')
                     f.write(' "' + str(data["total_points"]) + '",\n')
                     f.write(f' "{team}",\n')
-                    f.write(' "1"\n')
+                    f.write(' "' + str(data["division"]) + '",\n')
                     f.write("],\n")
             f.write("];\n")

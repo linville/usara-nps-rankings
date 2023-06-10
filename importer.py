@@ -1,4 +1,18 @@
+import math
 from openpyxl import load_workbook
+
+
+def calc_max_race_points_from_length(length):
+    if length <= 7:
+        return 25
+    elif length > 7 and length <= 15:
+        return 50
+    elif length > 15 and length <= 36:
+        return 100
+    elif length > 36 and length <= 72:
+        return 125
+    elif length > 72:
+        return 150
 
 
 class ResultsImporter(object):
@@ -55,8 +69,8 @@ class ResultsImporter(object):
             raise ValueError("Missing some race info:", self._race_info)
 
     def _import_results(self, results_sheet):
-        # Get column indexes of required columns, this allows them to be in
-        # any order.
+        # Get column indexes of required columns from the first row, this allows
+        # them to be in any order.
         for cnum in range(1, results_sheet.max_column + 1):
             field = results_sheet.cell(row=1, column=cnum).value
             if field in self._column_mapping:
@@ -66,14 +80,41 @@ class ResultsImporter(object):
         if None in self._column_mapping.values():
             raise ValueError("Missing some results columns:", self._column_mapping)
 
-        points = 1
+        max_points = calc_max_race_points_from_length(self._race_info["Race Length"])
 
-        # self._ranker.add_entry(
-        #    division,
-        #    team_name,
-        #    self._race_name,
-        #    overall_place,
-        #    division_place,
-        #    points,
-        #    members,
-        # )
+        def cell_to_var(rnum, field):
+            """Just a quick lambda to reduce some code in the next loop."""
+            cell = results_sheet.cell(row=rnum, column=self._column_mapping[field])
+            return cell.value
+
+        # Actual data starts on 2nd row
+        for rnum in range(2, results_sheet.max_row + 1):
+            team_name = cell_to_var(rnum, "Team Name")
+            division = cell_to_var(rnum, "Division")
+            overall_place = cell_to_var(rnum, "Overall Place")
+            division_place = cell_to_var(rnum, "Division Place")
+
+            members = []
+            for x in range(1, 5):  # Racers 1-4
+                racer = cell_to_var(rnum, f"Racer {x}")
+                if racer is not None:
+                    members.append(racer)
+
+            if division is None:
+                return
+
+            # USARA points formula
+            if division_place == "DNF":
+                points = 1
+            else:
+                points = round(max_points * (1 - math.log(overall_place) * 0.24))
+
+            self._ranker.add_entry(
+                division,
+                team_name,
+                self._race_info["Race Name"],
+                overall_place,
+                division_place,
+                points,
+                members,
+            )
