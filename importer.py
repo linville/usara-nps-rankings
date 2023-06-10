@@ -113,6 +113,7 @@ class ResultsImporter(object):
                 division,
                 team_name,
                 self._race_info["Race Name"],
+                self._race_info["Race Date"],
                 overall_place,
                 division_place,
                 points,
