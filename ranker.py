@@ -1,20 +1,30 @@
+import math
+
+
+def calc_max_race_points_from_length(length):
+    if length <= 7:
+        return 25
+    elif length > 7 and length <= 15:
+        return 50
+    elif length > 15 and length <= 36:
+        return 100
+    elif length > 36 and length <= 72:
+        return 125
+    elif length > 72:
+        return 150
+
+
 class Ranker(object):
     def __init__(self):
-        self._division_results = {
-            "C-3/4": {},
-            "F-3/4": {},
-            "M-3/4": {}
-        }
+        self._division_results = {"C-3/4": {}, "F-3/4": {}, "M-3/4": {}}
 
     def add_entry(
         self,
+        race_info,
         division,
         team_name,
-        race_name,
-        race_date,
-        overall_rank,
-        division_rank,
-        points,
+        overall_place,
+        division_place,
         members,
     ):
         """Adds a new team into the division results"""
@@ -33,6 +43,16 @@ class Ranker(object):
             print(f"Unknown division: {division}")
             return
 
+        # USARA points are awarded using the formula below. Non-DNF
+        # teams are awarded at least 2 points (DNF is 1 point).
+        if division_place == "DNF":
+            points = 1
+        else:
+            max_points = calc_max_race_points_from_length(race_info["Race Length"])
+
+            points = round(max_points * (1 - math.log(overall_place) * 0.24))
+            points = max(points, 2)
+
         if team_name not in self._division_results[division]:
             self._division_results[division][team_name] = {
                 "points": 0,
@@ -42,12 +62,12 @@ class Ranker(object):
         team_entry = self._division_results[division][team_name]
         team_entry["division"] = division
         team_entry["points"] += points
-        
+
         team_entry["race_data"].append({
-            "date": race_date.strftime("%Y-%m-%d"),
-            "name": race_name,
-            "overall": overall_rank,
-            "division": division_rank,
+            "date": race_info["Race Date"].strftime("%Y-%m-%d"),
+            "name": race_info["Race Name"],
+            "overall": overall_place,
+            "division": division_place,
             "points": points,
             "members": ", ".join(members),
         })

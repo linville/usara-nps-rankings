@@ -1,18 +1,4 @@
-import math
 from openpyxl import load_workbook
-
-
-def calc_max_race_points_from_length(length):
-    if length <= 7:
-        return 25
-    elif length > 7 and length <= 15:
-        return 50
-    elif length > 15 and length <= 36:
-        return 100
-    elif length > 36 and length <= 72:
-        return 125
-    elif length > 72:
-        return 150
 
 
 class ResultsImporter(object):
@@ -80,8 +66,6 @@ class ResultsImporter(object):
         if None in self._column_mapping.values():
             raise ValueError("Missing some results columns:", self._column_mapping)
 
-        max_points = calc_max_race_points_from_length(self._race_info["Race Length"])
-
         def cell_to_var(rnum, field):
             """Just a quick lambda to reduce some code in the next loop."""
             cell = results_sheet.cell(row=rnum, column=self._column_mapping[field])
@@ -103,21 +87,11 @@ class ResultsImporter(object):
             if division is None:
                 return
 
-            # USARA points are awarded using the formula below. Non-DNF
-            # teams are awarded at least 2 points (DNF is 1 point).
-            if division_place == "DNF":
-                points = 1
-            else:
-                points = round(max_points * (1 - math.log(overall_place) * 0.24))
-                points = max(points, 2)
-
             self._ranker.add_entry(
+                self._race_info,
                 division,
                 team_name,
-                self._race_info["Race Name"],
-                self._race_info["Race Date"],
                 overall_place,
                 division_place,
-                points,
                 members,
             )
