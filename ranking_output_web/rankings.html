@@ -11,22 +11,14 @@
 
         <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />-->
         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" integrity="sha256-V0gSwU9TL9C8gNK/k8OZ5RFDRuiGmzpI4fsI0F6i6aw=" crossorigin="anonymous" referrerpolicy="no-referrer" />
-        <style>
-        select.form-control {
-            display: inline;
-            width: 100px;
-            margin-left: 10px;
-        }
-        </style>
     </head>
+    <body>
 
-    <div class="category-filter">
-        <select id="divisionFilter" class="form-control">
-            <option value="C-3/4">C-3/4</option>
-            <option value="F-3/4">F-3/4</option>
-            <option value="M-3/4">M-3/4</option>
-        </select>
-    </div>
+    <select id="divisionFilter" class="form-control" style="display: inline; margin-left: 10px; width: 100px;">
+        <option value="C-3/4">C-3/4</option>
+        <option value="F-3/4">F-3/4</option>
+        <option value="M-3/4">M-3/4</option>
+    </select>
 
     <table id="ranking" class="display" style="width:100%">
         <thead>
