@@ -16,7 +16,13 @@ def calc_max_race_points_from_length(length):
 
 class Ranker(object):
     def __init__(self):
-        self._division_results = {"C-3/4": {}, "F-3/4": {}, "M-3/4": {}}
+        # fmt: off
+        self._division_results = {
+            "C-3/4": {},
+            "F-3/4": {},
+            "M-3/4": {}
+        }
+        # fmt: on
 
     def add_entry(
         self,
