@@ -33,6 +33,7 @@ def main():
     for f in data_files:
         importer.import_file(f)
 
+    ranker.assign_rank()
     ranker.export_json(args.json)
 
 

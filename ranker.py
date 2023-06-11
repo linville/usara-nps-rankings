@@ -61,6 +61,7 @@ class Ranker(object):
 
         if team_name not in self._division_results[division]:
             self._division_results[division][team_name] = {
+                "rank": 0,
                 "points": 0,
                 "race_data": [],
             }
@@ -78,6 +79,28 @@ class Ranker(object):
             "members": ", ".join(members),
         })
 
+    def assign_rank(self):
+        for division, results in self._division_results.items():
+            # Sort by points
+            sorted_teams = sorted(
+                results.items(), key=lambda x: x[1]["points"], reverse=True
+            )
+
+            sorted_teams[0][1]["rank"] = 1
+            last_points = sorted_teams[0][1]["points"]
+
+            rank = 0
+            skip_rank = 0
+            for team, data in sorted_teams[1:]:
+                if data["points"] == last_points:
+                    skip_rank += 1
+                elif data["points"] < last_points:
+                    rank += 1 + skip_rank
+                    skip_rank = 0
+
+                data["rank"] = rank + 1
+                last_points = data["points"]
+
     def export_json(self, path_to_json):
         with open(path_to_json, "w") as f:
             f.write("var ranking_data = [\n")
@@ -86,7 +109,7 @@ class Ranker(object):
                 for team, data in results.items():
                     f.write(
                         "  {\n"
-                        f'    "rank": 0,\n'
+                        f"    \"rank\": {data['rank']},\n"
                         f"    \"points\": {data['points']},\n"
                         f'    "team": "{team}",\n'
                         f"    \"total_races\": {len(data['race_data'])},\n"
