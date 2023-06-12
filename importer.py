@@ -50,6 +50,10 @@ class ResultsImporter(object):
             if cell.value in self._race_info:
                 self._race_info[cell.value] = cell.offset(column=1).value
 
+        # Allow winning time to be missing
+        if self._race_info["Winning Time"] is None:
+            self._race_info["Winning Time"] = "?"
+
         # Verify we found the required Race Info fields.
         if None in self._race_info.values():
             raise ValueError("Missing some race info:", self._race_info)
