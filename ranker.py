@@ -70,9 +70,11 @@ class Ranker(object):
         team_entry["division"] = division
         team_entry["points"] += points
 
+        race_name_full = f"{race_info['Race Name']} {race_info['Race Length']} Hour"
+
         team_entry["race_data"].append({
             "date": race_info["Race Date"].strftime("%Y-%m-%d"),
-            "name": race_info["Race Name"],
+            "name": race_name_full,
             "overall": overall_place,
             "division": division_place,
             "points": points,

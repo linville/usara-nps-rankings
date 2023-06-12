@@ -58,6 +58,9 @@ class ResultsImporter(object):
         if None in self._race_info.values():
             raise ValueError("Missing some race info:", self._race_info)
 
+        # Round the race length
+        self._race_info["Race Length"] = round(self._race_info["Race Length"])
+
     def _import_results(self, results_sheet):
         # Get column indexes of required columns from the first row, this allows
         # them to be in any order.
