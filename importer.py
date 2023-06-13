@@ -85,14 +85,14 @@ class ResultsImporter(object):
             overall_place = cell_to_var(rnum, "Overall Place")
             division_place = cell_to_var(rnum, "Division Place")
 
+            if division is None:
+                return
+
             members = []
             for x in range(1, 5):  # Racers 1-4
                 racer = cell_to_var(rnum, f"Racer {x}")
                 if racer is not None:
                     members.append(racer)
-
-            if division is None:
-                return
 
             self._ranker.add_entry(
                 self._race_info,
