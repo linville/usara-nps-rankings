@@ -30,7 +30,9 @@ class Ranker(object):
         division,
         team_name,
         overall_place,
+        overall_count,
         division_place,
+        division_count,
         members,
     ):
         """Adds a new team into the division results"""
@@ -79,7 +81,9 @@ class Ranker(object):
             "date": race_info["Race Date"].strftime("%Y-%m-%d"),
             "name": race_name_full,
             "overall": overall_place,
+            "overall_count": overall_count,
             "division": division_place,
+            "division_count": division_count,
             "points": points,
             "members": ", ".join(members),
         })
@@ -105,6 +109,9 @@ class Ranker(object):
 
                 data["rank"] = rank + 1
                 last_points = data["points"]
+
+    def assign_totals(self):
+        """This calculates the overall and division totals"""
 
     def export_json(self, path_to_json):
         with open(path_to_json, "w") as f:

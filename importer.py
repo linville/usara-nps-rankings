@@ -1,3 +1,4 @@
+from collections import Counter
 from openpyxl import load_workbook
 
 
@@ -78,8 +79,22 @@ class ResultsImporter(object):
             cell = results_sheet.cell(row=rnum, column=self._column_mapping[field])
             return cell.value
 
-        # Actual data starts on 2nd row
-        for rnum in range(2, results_sheet.max_row + 1):
+        overall_count = 0
+        division_count = Counter()
+
+        # Loop through first to establish overall and division counts
+        for rnum in range(2, results_sheet.max_row):
+            division = cell_to_var(rnum, "Division")
+
+            if division is None:
+                break
+
+            overall_count += 1
+            division_count[division] += 1
+
+        # Loop through 2nd time to import actual data, and use previous
+        # counts when adding an entry.
+        for rnum in range(2, results_sheet.max_row):
             team_name = cell_to_var(rnum, "Team Name")
             division = cell_to_var(rnum, "Division")
             overall_place = cell_to_var(rnum, "Overall Place")
@@ -99,6 +114,8 @@ class ResultsImporter(object):
                 division,
                 team_name,
                 overall_place,
+                overall_count,
                 division_place,
+                division_count[division],
                 members,
             )

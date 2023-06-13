@@ -68,8 +68,8 @@ function team_detail(d) {
         str += '<tr>';
         str +=     '<td>' + race.date + '</td>';
         str +=     '<td>' + race.name + '</td>';
-        str +=     '<td>' + race.overall + '</td>';
-        str +=     '<td>' + race.division + '</td>';
+        str +=     '<td>' + race.overall + ' of ' + race.overall_count + '</td>';
+        str +=     '<td>' + race.division + ' of ' + race.division_count + '</td>';
         str +=     '<td>' + race.points + '</td>';
         str +=     '<td>' + race.members + '</td>';
         str += '</tr>';
