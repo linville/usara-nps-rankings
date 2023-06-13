@@ -51,13 +51,16 @@ class Ranker(object):
 
         # USARA points are awarded using the formula below. Non-DNF
         # teams are awarded at least 2 points (DNF is 1 point).
-        if division_place == "DNF":
+        if overall_place == "DNF" or division_place == "DNF":
             points = 1
         else:
             max_points = calc_max_race_points_from_length(race_info["Race Length"])
 
-            points = round(max_points * (1 - math.log(overall_place) * 0.24))
-            points = max(points, 2)
+            try:
+                points = round(max_points * (1 - math.log(overall_place) * 0.24))
+                points = max(points, 2)
+            except TypeError as e:
+                print(f"Invalid overall place: {overall_place}")
 
         if team_name not in self._division_results[division]:
             self._division_results[division][team_name] = {
