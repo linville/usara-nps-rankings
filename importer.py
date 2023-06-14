@@ -31,18 +31,18 @@ class ResultsImporter(object):
     def import_file(self, path):
         print("Importing ", path)
 
-        if path.suffix == ".xlsx":
-            wb = load_workbook(path)
-
-            required = ["Instructions", "Race Info", "Results"]
-            for r in required:
-                if r not in wb.sheetnames:
-                    raise ValueError(f"Missing {r} worksheet: {path}")
-
-            self._import_race_info(wb.get_sheet_by_name("Race Info"))
-            self._import_results(wb.get_sheet_by_name("Results"))
-        else:
+        if path.suffix != ".xlsx":
             raise ValueError("Unknown file type: ", path)
+
+        wb = load_workbook(path)
+
+        required = ["Instructions", "Race Info", "Results"]
+        for r in required:
+            if r not in wb.sheetnames:
+                raise ValueError(f"Missing {r} worksheet: {path}")
+
+        self._import_race_info(wb.get_sheet_by_name("Race Info"))
+        self._import_results(wb.get_sheet_by_name("Results"))
 
     def _import_race_info(self, race_info_sheet):
         # Assume the Race Info field names are the first column and the

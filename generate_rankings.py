@@ -29,7 +29,7 @@ def main():
     ranker = Ranker()
     importer = ResultsImporter(ranker)
 
-    data_files = [f for f in args.path.iterdir() if f.is_file()]
+    data_files = [f for f in args.path.glob("*.xlsx") if f.is_file()]
     for f in data_files:
         importer.import_file(f)
 
