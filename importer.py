@@ -1,4 +1,5 @@
 from collections import Counter
+import html
 from openpyxl import load_workbook
 
 
@@ -89,7 +90,6 @@ class ResultsImporter(object):
         # Loop through first to establish overall and division counts
         for rnum in range(2, results_sheet.max_row):
             division = cell_to_var(rnum, "Division")
-
             if division is None:
                 break
 
@@ -99,19 +99,18 @@ class ResultsImporter(object):
         # Loop through 2nd time to import actual data, and use previous
         # counts when adding an entry.
         for rnum in range(2, results_sheet.max_row):
-            team_name = cell_to_var(rnum, "Team Name")
             division = cell_to_var(rnum, "Division")
-            overall_place = cell_to_var(rnum, "Overall Place")
-            division_place = cell_to_var(rnum, "Division Place")
-
             if division is None:
                 return
 
+            team_name = html.escape(str(cell_to_var(rnum, "Team Name")))
+            overall_place = cell_to_var(rnum, "Overall Place")
+            division_place = cell_to_var(rnum, "Division Place")
             members = []
             for x in range(1, 5):  # Racers 1-4
                 racer = cell_to_var(rnum, f"Racer {x}")
                 if racer is not None:
-                    members.append(racer)
+                    members.append(html.escape(racer))
 
             self._ranker.add_entry(
                 self._race_info,
