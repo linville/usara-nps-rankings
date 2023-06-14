@@ -77,7 +77,11 @@ class ResultsImporter(object):
         def cell_to_var(rnum, field):
             """Just a quick lambda to reduce some code in the next loop."""
             cell = results_sheet.cell(row=rnum, column=self._column_mapping[field])
-            return cell.value
+
+            if cell.value is str:
+                return str(cell.value).strip()
+            else:
+                return cell.value
 
         overall_count = 0
         division_count = Counter()
