@@ -115,6 +115,7 @@ class Ranker(object):
 
     def export_json(self, path_to_json):
         with open(path_to_json, "w") as f:
+            f.write("// You race, code and now you want data? Join us: http://github.com/linville/usara-nps-rankings\n\n")
             f.write("var ranking_data = [\n")
 
             for division, results in self._division_results.items():
