@@ -112,6 +112,9 @@ class ResultsImporter(object):
                 if racer is not None:
                     members.append(html.escape(racer))
 
+            if division.endswith("-1"):
+                team_name = members[0]
+
             self._ranker.add_entry(
                 self._race_info,
                 division,
