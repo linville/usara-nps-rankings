@@ -20,7 +20,12 @@ class Ranker(object):
         self._division_results = {
             "C-3/4": {},
             "F-3/4": {},
-            "M-3/4": {}
+            "M-3/4": {},
+            "C-2": {},
+            "F-2": {},
+            "M-2": {},
+            "F-1": {},
+            "M-1": {},
         }
         # fmt: on
 
@@ -39,12 +44,6 @@ class Ranker(object):
 
         if division.startswith("FAM"):
             # Skip importing family divisions, for now.
-            return
-        elif division.endswith("-1"):
-            # Skip importing soloists, for now.
-            return
-        elif division.endswith("-2"):
-            # Skip importing 2-person teams, for now.
             return
 
         if division not in self._division_results:
