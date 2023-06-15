@@ -79,7 +79,7 @@ class ResultsImporter(object):
             """Just a quick lambda to reduce some code in the next loop."""
             cell = results_sheet.cell(row=rnum, column=self._column_mapping[field])
 
-            if cell.value is str:
+            if type(cell.value) is str:
                 return str(cell.value).strip()
             else:
                 return cell.value
@@ -109,7 +109,7 @@ class ResultsImporter(object):
             members = []
             for x in range(1, 5):  # Racers 1-4
                 racer = cell_to_var(rnum, f"Racer {x}")
-                if racer is not None:
+                if racer:
                     members.append(html.escape(racer))
 
             if division.endswith("-1"):
