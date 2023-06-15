@@ -5,6 +5,7 @@
 build
 dist
 .DS_Store
+*.swp
 __pycache__
 MANIFEST
 source_data
