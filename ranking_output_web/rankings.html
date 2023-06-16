@@ -28,10 +28,9 @@
         <option value="M-1">M-1</option>
     </select>
 
-    <table id="ranking" class="display" style="width:100%">
+    <table id="ranking" class="display compact nowrap" style="width:100%">
         <thead>
             <tr>
-                <th></th>
                 <th>Rank</th>
                 <th>Points</th>
                 <th>Team</th>
@@ -41,7 +40,6 @@
         </thead>
         <tfoot>
             <tr>
-                <th></th>
                 <th>Rank</th>
                 <th>Points</th>
                 <th>Team</th>
@@ -61,7 +59,7 @@
 function team_detail(d) {
     // `d` is the original data object for the row
     
-    str  = '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">';
+    str  = '<table>';
     str += '<thead><tr>';
     str +=     '<th>Date</th>';
     str +=     '<th>Race</th>';
@@ -92,12 +90,6 @@ $(document).ready(function () {
     var table = $('#ranking').DataTable({
         data: ranking_data,
         columns: [
-            {
-                className: 'dt-control',
-                orderable: false,
-                data: null,
-                defaultContent: '',
-            },
             { data: 'rank' },
             { data: 'points' },
             { data: 'team' },
@@ -107,14 +99,17 @@ $(document).ready(function () {
                 orderable: false,
             },
         ],
-        order: [[2, 'desc']], // Default to ordering by points column
-        "iDisplayLength": 50,
+        order: [[1, 'desc']], // Default to ordering by points column
+        scrollY: '70vh',
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
         "searching": true,
     });
 
     // Handles click-to-show-details of a team
-    $('#ranking tbody').on('click', 'td.dt-control', function () {
-        var tr = $(this).closest('tr');
+    $('#ranking tbody').on('click', 'tr', function () {
+        var tr = $(this);
         var row = table.row(tr);
  
         if (row.child.isShown()) {
@@ -133,8 +128,8 @@ $(document).ready(function () {
 
     // Use the built in datatables API to filter the existing rows by the Category column
     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-        // Division column is the 5th column
-        var division = data[5];
+        // Division column is the 4th column
+        var division = data[4];
 
         var selectedItem = $('#divisionFilter').val();
         if (selectedItem === "" || division.includes(selectedItem)) {
