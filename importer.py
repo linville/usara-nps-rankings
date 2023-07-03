@@ -4,8 +4,9 @@ from openpyxl import load_workbook
 
 
 class ResultsImporter(object):
-    def __init__(self, ranker):
-        self._ranker = ranker
+    def __init__(self, team_ranker, individual_ranker):
+        self._teamranker = team_ranker
+        self._indivranker = individual_ranker
 
         # Temporary variables set during import
         self._race_info = {
@@ -115,7 +116,7 @@ class ResultsImporter(object):
             if division.endswith("-1"):
                 team_name = members[0]
 
-            self._ranker.add_entry(
+            self._teamranker.add_entry(
                 self._race_info,
                 division,
                 team_name,
@@ -125,3 +126,15 @@ class ResultsImporter(object):
                 division_count[division],
                 members,
             )
+            
+            self._indivranker.add_entry(
+                self._race_info,
+                division,
+                team_name,
+                overall_place,
+                overall_count,
+                division_place,
+                division_count[division],
+                members,
+            )
+

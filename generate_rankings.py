@@ -8,17 +8,25 @@ if not sys.version_info >= (3, 10):
 import argparse
 from pathlib import Path
 from importer import ResultsImporter
-from ranker import Ranker
+from team_ranker import TeamRanker
+from individual_ranker import IndividualRanker
 
 
 def main():
     parser = argparse.ArgumentParser(description="Calculate USARA Power Rankings.")
     parser.add_argument(
-        "--json",
+        "--team-json",
         metavar="path-to-output",
         type=Path,
-        default="ranking_output_web/ranking_data.js",
-        help="Path output ranking JSON to create.",
+        default="ranking_output_web/team_ranking_data.js",
+        help="Path output team ranking JSON to create.",
+    )
+    parser.add_argument(
+        "--individual-json",
+        metavar="path-to-output",
+        type=Path,
+        default="ranking_output_web/individual_ranking_data.js",
+        help="Path output individual ranking JSON to create.",
     )
     parser.add_argument(
         "path", metavar="path-to-data", type=Path, help="Path to data files."
@@ -26,15 +34,19 @@ def main():
 
     args = parser.parse_args()
 
-    ranker = Ranker()
-    importer = ResultsImporter(ranker)
+    team_ranker = TeamRanker()
+    indiv_ranker = IndividualRanker()
+    importer = ResultsImporter(team_ranker, indiv_ranker)
 
     data_files = [f for f in args.path.glob("*.xlsx") if f.is_file()]
     for f in data_files:
         importer.import_file(f)
 
-    ranker.assign_rank()
-    ranker.export_json(args.json)
+    team_ranker.assign_rank()
+    team_ranker.export_json(args.team_json)
+
+    indiv_ranker.assign_rank()
+    indiv_ranker.export_json(args.individual_json)
 
 
 if __name__ == "__main__":

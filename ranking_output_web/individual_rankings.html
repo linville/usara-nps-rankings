@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <meta name="description" content="">
+
+        <title>USARA Individual Power Rankings</title>
+
+        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" integrity="sha512-t4GWSVZO1eC8BM339Xd7Uphw5s17a86tIZIj8qRxhnKub6WoyhnrxeCIMeAqBPgdZGlCcG2PrZjMc+Wr78+5Xg==" crossorigin="anonymous" referrerpolicy="no-referrer" />-->
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" integrity="sha256-V0gSwU9TL9C8gNK/k8OZ5RFDRuiGmzpI4fsI0F6i6aw=" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    </head>
+    <body>
+
+    <!-- Oh, an adventure racer who codes? Come join us: http://github.com/linville/usara-nps-rankings -->
+
+    <select id="genderFilter" class="form-control" style="display: inline; margin-left: 10px; width: 100px;">
+        <option value="" selected="selected">Show All</option>
+        <option value="M">M</option>
+        <option value="F">F</option>
+    </select>
+
+    <table id="ranking" class="display compact nowrap" style="width:100%">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Points</th>
+                <th>Racer</th>
+                <th>Races</th>
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>
+                <th>Rank</th>
+                <th>Points</th>
+                <th>Team</th>
+                <th>Races</th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js" integrity="sha512-3dZ9wIrMMij8rOH7X3kLfXAzwtcHpuYpEgQg1OA4QAob1e81H8ntUQmQm3pBudqIoySO5j0tHN4ENzA6+n2r4w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js" integrity="sha256-VSu9DD6vJurraXgjxQJv9BuzedGfJm7XEgPQQehKBlw=" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript" src="individual_ranking_data.js"></script>
+    <script type="text/javascript">
+
+function team_detail(d) {
+    // `d` is the original data object for the row
+    
+    str  = '<table>';
+    str += '<thead><tr>';
+    str +=     '<th>Date</th>';
+    str +=     '<th>Race</th>';
+    str +=     '<th>Overall</th>';
+    str +=     '<th>Division</th>';
+    str +=     '<th>Points</th>';
+    str +=     '<th>Members</th>';
+    str += '</tr></thead>';
+
+    str += '<tbody>';
+    for (race of d.race_data) {
+        str += '<tr>';
+        str +=     '<td>' + race.date + '</td>';
+        str +=     '<td>' + race.name + '</td>';
+        str +=     '<td>' + race.overall + ' of ' + race.overall_count + '</td>';
+        str +=     '<td>' + race.division + ' of ' + race.division_count + '</td>';
+        str +=     '<td>' + race.points + '</td>';
+        str +=     '<td>' + race.members + '</td>';
+        str += '</tr>';
+    }
+    str += '</tbody>';
+    str += '</table>';
+    
+    return (str);
+}
+
+$(document).ready(function () {
+    var table = $('#ranking').DataTable({
+        data: ranking_data,
+        columns: [
+            { data: 'rank' },
+            { data: 'points' },
+            { data: 'racer' },
+            { data: 'total_races' },
+        ],
+        order: [[1, 'desc']], // Default to ordering by points column
+        scrollY: '70vh',
+        scrollX: true,
+        scrollCollapse: true,
+        paging: false,
+        "searching": true,
+    });
+
+    // Handles click-to-show-details of a team
+    $('#ranking tbody').on('click', 'tr', function () {
+        var tr = $(this);
+        var row = table.row(tr);
+ 
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            row.child(team_detail(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+
+    // Move division filter combobox into table filter area
+    $("#ranking_filter.dataTables_filter").append($("#genderFilter"));
+
+    // Use the built in datatables API to filter the existing rows by the Category column
+    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+        // Gender column is the unknown column, for now.
+        var gender = "";
+
+        var selectedItem = $('#genderFilter').val();
+        if (selectedItem === "" || division.includes(selectedItem)) {
+            return true;
+        }
+        return false;
+    });
+
+    // Redraw the table after changing division
+    $("#genderFilter").change(function (e) {
+        table.draw();
+    });
+
+    // Force table to re-draw so the default filter is applied.
+    table.draw();
+});
+
+    </script>
+    </body>
+</html>
