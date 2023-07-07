@@ -14,7 +14,7 @@ def calc_max_race_points_from_length(length):
         return 150
 
 
-class Ranker(object):
+class TeamRanker(object):
     def __init__(self):
         # fmt: off
         self._division_results = {
@@ -108,9 +108,6 @@ class Ranker(object):
 
                 data["rank"] = rank + 1
                 last_points = data["points"]
-
-    def assign_totals(self):
-        """This calculates the overall and division totals"""
 
     def export_json(self, path_to_json):
         with open(path_to_json, "w") as f:
